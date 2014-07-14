@@ -39,7 +39,31 @@ func (brain *Brain) Save() {
 
 }
 
+// Add a memory
+func (brain *Brain) Add(m Memory) Memory {
+	m.Id = brain.GetNextId()
+	m.Active = true
+	m.CreatedAt = time.Now()
+
+	brain.Memories = append(brain.Memories, m)
+
+	// Return the memory since it's been given an Id and a CreatedAt
+	return m
+}
+
 // Return the current brain
 func getBrain() Brain {
 	return brain
+}
+
+// Get the next Id for the brain
+func (brain *Brain) GetNextId() int {
+	i := 0
+	for _, v := range brain.Memories {
+		if v.Id > i {
+			i = v.Id
+		}
+	}
+
+	return i
 }
