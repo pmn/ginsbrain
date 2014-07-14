@@ -22,5 +22,41 @@ func returnJson(obj interface{}, w http.ResponseWriter, h *http.Request) {
 }
 
 func defaultHandler(w http.ResponseWriter, h *http.Request) {
-  fmt.Fprint(w, "cool, running")
+	fmt.Fprint(w, "cool, running")
+}
+
+// Return all memories
+func allMemoryHandler(w http.ResponseWriter, h *http.Request) {
+	brain := getBrain()
+	returnJson(brain, w, h)
+}
+
+// Return a random memory
+func randomMemoryHandler(w http.ResponseWriter, h *http.Request) {
+	brain := getBrain()
+	returnJson(brain, w, h)
+}
+
+// Return a specific memory
+func getMemoryHandler(w http.ResponseWriter, h *http.Request) {
+	brain := getBrain()
+	returnJson(brain, w, h)
+}
+
+// Add a memory
+func addMemoryHandler(w http.ResponseWriter, h *http.Request) {
+	brain := getBrain()
+	returnJson(brain, w, h)
+}
+
+// Change a memory
+func changeMemoryHandler(w http.ResponseWriter, h *http.Request) {
+	brain := getBrain()
+	returnJson(brain, w, h)
+}
+
+// Remove a memory
+func removeMemoryHandler(w http.ResponseWriter, h *http.Request) {
+	brain := getBrain()
+	returnJson(brain, w, h)
 }
