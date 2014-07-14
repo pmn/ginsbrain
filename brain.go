@@ -5,10 +5,11 @@ import (
 )
 
 type Memory struct {
-	Id        int       `json:"id"`
-	Text      string    `json:"text"`
-	CreatedAt time.Time `json:"created_at"`
-	Active    bool      `json:"active"`
+	Id      int       `json:"id"`
+	Text    string    `json:"text"`
+	AddedBy string    `json:"added_by"`
+	AddedAt time.Time `json:"added_at"`
+	Active  bool      `json:"active"`
 }
 
 type Brain struct {
@@ -43,11 +44,11 @@ func (brain *Brain) Save() {
 func (brain *Brain) Add(m Memory) Memory {
 	m.Id = brain.GetNextId()
 	m.Active = true
-	m.CreatedAt = time.Now()
+	m.AddedAt = time.Now()
 
 	brain.Memories = append(brain.Memories, m)
 
-	// Return the memory since it's been given an Id and a CreatedAt
+	// Return the memory since it's been given an Id and a AddedAt
 	return m
 }
 
@@ -77,5 +78,5 @@ func (brain *Brain) GetNextId() int {
 		}
 	}
 
-	return i+1
+	return i + 1
 }
