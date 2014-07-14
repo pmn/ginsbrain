@@ -60,8 +60,8 @@ func addMemoryHandler(w http.ResponseWriter, h *http.Request) {
 	b := json.NewDecoder(h.Body)
 	b.Decode(&m)
 
-	brain.Memories = append(brain.Memories, m)
-	returnJson(m, w, h)
+	memory := brain.Add(m)
+	returnJson(memory, w, h)
 }
 
 // Change a memory

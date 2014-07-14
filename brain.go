@@ -65,5 +65,5 @@ func (brain *Brain) GetNextId() int {
 		}
 	}
 
-	return i
+	return i+1
 }
