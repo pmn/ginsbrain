@@ -34,7 +34,7 @@ func main() {
 	r.HandleFunc("/memories", allMemoryHandler).Methods("GET")
 	r.HandleFunc("/memories/{id}", getMemoryHandler).Methods("GET")
 	r.HandleFunc("/memories", addMemoryHandler).Methods("POST")
-	r.HandleFunc("/memories/{id}", changeMemoryHandler).Methods("PUT, PATCH")
+	r.HandleFunc("/memories/{id}", changeMemoryHandler).Methods("PUT")
 	r.HandleFunc("/memories/{id}", removeMemoryHandler).Methods("DELETE")
 	r.HandleFunc("/memories/search/{term}", searchMemoryHandler).Methods("GET")
 

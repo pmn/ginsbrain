@@ -51,6 +51,18 @@ func (brain *Brain) Add(m Memory) Memory {
 	return m
 }
 
+// Update a memory
+func (brain *Brain) Update(m Memory) Memory {
+	var idx int
+	for k, v := range brain.Memories {
+		if v.Id == m.Id {
+			idx = k
+			brain.Memories[k].Text = m.Text
+		}
+	}
+	return brain.Memories[idx]
+}
+
 // Return the current brain
 func getBrain() Brain {
 	return brain

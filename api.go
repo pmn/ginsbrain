@@ -79,13 +79,19 @@ func searchMemoryHandler(w http.ResponseWriter, h *http.Request) {
 			results = append(results, v)
 		}
 	}
-	
+
 	returnJson(results, w, h)
 }
 
 // Change a memory
 func changeMemoryHandler(w http.ResponseWriter, h *http.Request) {
-	returnJson(brain, w, h)
+	var m Memory
+	b := json.NewDecoder(h.Body)
+	b.Decode(&m)
+
+	memory := brain.Update(m)
+
+	returnJson(memory, w, h)
 }
 
 // Remove a memory
