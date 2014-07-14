@@ -6,6 +6,7 @@ import (
 	"github.com/gorilla/mux"
 	"net/http"
 	"strconv"
+	"math/rand"
 )
 
 // Return the data in JSON format. This is the default return method.
@@ -34,7 +35,9 @@ func allMemoryHandler(w http.ResponseWriter, h *http.Request) {
 
 // Return a random memory
 func randomMemoryHandler(w http.ResponseWriter, h *http.Request) {
-	returnJson(brain, w, h)
+	random_id := rand.Intn(brain.GetNextId()-1)
+	m := brain.Memories[random_id]
+	returnJson(m, w, h)
 }
 
 // Return a specific memory
