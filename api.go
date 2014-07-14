@@ -56,7 +56,12 @@ func getMemoryHandler(w http.ResponseWriter, h *http.Request) {
 
 // Add a memory
 func addMemoryHandler(w http.ResponseWriter, h *http.Request) {
-	returnJson(brain, w, h)
+	var m Memory
+	b := json.NewDecoder(h.Body)
+	b.Decode(&m)
+
+	brain.Memories = append(brain.Memories, m)
+	returnJson(m, w, h)
 }
 
 // Change a memory
