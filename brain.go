@@ -17,10 +17,24 @@ type Brain struct {
 
 // Load a brain
 func (brain *Brain) Load() {
+	var memories []Memory
+	var memory Memory
+	memory.Id = 0
+	memory.Text = "Some circus subculture shit"
+	memory.Active = true
 
+	var memory2 Memory
+	memory2.Id = 1
+	memory2.Text = "cetacean junk"
+	memory2.Active = true
+
+	memories = append(memories, memory)
+	memories = append(memories, memory2)
+
+	brain.Memories = memories
 }
 
-// Perisst a brain
+// Persist a brain
 func (brain *Brain) Save() {
 
 }

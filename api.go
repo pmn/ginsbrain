@@ -3,7 +3,9 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/gorilla/mux"
 	"net/http"
+	"strconv"
 )
 
 // Return the data in JSON format. This is the default return method.
@@ -27,36 +29,42 @@ func defaultHandler(w http.ResponseWriter, h *http.Request) {
 
 // Return all memories
 func allMemoryHandler(w http.ResponseWriter, h *http.Request) {
-	brain := getBrain()
 	returnJson(brain, w, h)
 }
 
 // Return a random memory
 func randomMemoryHandler(w http.ResponseWriter, h *http.Request) {
-	brain := getBrain()
 	returnJson(brain, w, h)
 }
 
 // Return a specific memory
 func getMemoryHandler(w http.ResponseWriter, h *http.Request) {
-	brain := getBrain()
-	returnJson(brain, w, h)
+	vars := mux.Vars(h)
+	id_string := vars["id"]
+
+	id, err := strconv.Atoi(id_string)
+	if err != nil {
+		fmt.Fprint(w, "Could not parse Id")
+	}
+
+	for _, v := range brain.Memories {
+		if v.Id == id {
+			returnJson(v, w, h)
+		}
+	}
 }
 
 // Add a memory
 func addMemoryHandler(w http.ResponseWriter, h *http.Request) {
-	brain := getBrain()
 	returnJson(brain, w, h)
 }
 
 // Change a memory
 func changeMemoryHandler(w http.ResponseWriter, h *http.Request) {
-	brain := getBrain()
 	returnJson(brain, w, h)
 }
 
 // Remove a memory
 func removeMemoryHandler(w http.ResponseWriter, h *http.Request) {
-	brain := getBrain()
 	returnJson(brain, w, h)
 }

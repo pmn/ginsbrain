@@ -30,12 +30,12 @@ func main() {
 	}
 
 	http.Handle("/", r)
-	r.HandleFunc("/memory/random", randomMemoryHandler).Methods("GET")
-	r.HandleFunc("/memory/all", allMemoryHandler).Methods("GET")
-	r.HandleFunc("/memory/[0-9]", getMemoryHandler).Methods("GET")
-	r.HandleFunc("/memory", addMemoryHandler).Methods("POST")
-	r.HandleFunc("/memory/[0-9]", changeMemoryHandler).Methods("PUT, PATCH")
-	r.HandleFunc("/memory/[0-9]", removeMemoryHandler).Methods("DELETE")
+	r.HandleFunc("/memories/random", randomMemoryHandler).Methods("GET")
+	r.HandleFunc("/memories", allMemoryHandler).Methods("GET")
+	r.HandleFunc("/memories/{id}", getMemoryHandler).Methods("GET")
+	r.HandleFunc("/memories", addMemoryHandler).Methods("POST")
+	r.HandleFunc("/memories/{id}", changeMemoryHandler).Methods("PUT, PATCH")
+	r.HandleFunc("/memories/{id}", removeMemoryHandler).Methods("DELETE")
 
 	log.Printf("[+] Uh, hi! My brain is running on port %s", port)
 	http.ListenAndServe(":"+port, Log(http.DefaultServeMux))
