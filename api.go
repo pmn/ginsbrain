@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"strconv"
 	"math/rand"
+	"strings"
 )
 
 // Return the data in JSON format. This is the default return method.
@@ -65,6 +66,21 @@ func addMemoryHandler(w http.ResponseWriter, h *http.Request) {
 
 	memory := brain.Add(m)
 	returnJson(memory, w, h)
+}
+
+func searchMemoryHandler(w http.ResponseWriter, h *http.Request) {
+	vars := mux.Vars(h)
+	term := vars["term"]
+
+	var results []Memory
+
+	for _, v := range brain.Memories {
+		if strings.Contains(v.Text, term) {
+			results = append(results, v)
+		}
+	}
+	
+	returnJson(results, w, h)
 }
 
 // Change a memory

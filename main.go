@@ -36,6 +36,7 @@ func main() {
 	r.HandleFunc("/memories", addMemoryHandler).Methods("POST")
 	r.HandleFunc("/memories/{id}", changeMemoryHandler).Methods("PUT, PATCH")
 	r.HandleFunc("/memories/{id}", removeMemoryHandler).Methods("DELETE")
+	r.HandleFunc("/memories/search/{term}", searchMemoryHandler).Methods("GET")
 
 	log.Printf("[+] Uh, hi! My brain is running on port %s", port)
 	http.ListenAndServe(":"+port, Log(http.DefaultServeMux))
