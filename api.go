@@ -25,10 +25,6 @@ func returnJson(obj interface{}, w http.ResponseWriter, h *http.Request) {
 	fmt.Fprint(w, string(j))
 }
 
-func defaultHandler(w http.ResponseWriter, h *http.Request) {
-	fmt.Fprint(w, "cool, running")
-}
-
 // Return all memories
 func allMemoryHandler(w http.ResponseWriter, h *http.Request) {
 	returnJson(brain, w, h)

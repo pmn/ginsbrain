@@ -21,15 +21,13 @@ func Log(handler http.Handler) http.Handler {
 var brain Brain
 
 func main() {
-	r := mux.NewRouter()
-	r.HandleFunc("/", defaultHandler).Methods("GET")
-
 	port := os.Getenv("PORT")
 	if len(port) == 0 {
 		port = "8080"
 	}
 
-	http.Handle("/", r)
+	r := mux.NewRouter()
+	r.HandleFunc("/", randomMemoryHandler).Methods("GET")
 	r.HandleFunc("/memories/random", randomMemoryHandler).Methods("GET")
 	r.HandleFunc("/memories", allMemoryHandler).Methods("GET")
 	r.HandleFunc("/memories/{id}", getMemoryHandler).Methods("GET")
@@ -37,6 +35,8 @@ func main() {
 	r.HandleFunc("/memories/{id}", changeMemoryHandler).Methods("PUT")
 	r.HandleFunc("/memories/{id}", removeMemoryHandler).Methods("DELETE")
 	r.HandleFunc("/memories/search/{term}", searchMemoryHandler).Methods("GET")
+
+	http.Handle("/", r)
 
 	log.Printf("[+] Uh, hi! My brain is running on port %s", port)
 	http.ListenAndServe(":"+port, Log(http.DefaultServeMux))
