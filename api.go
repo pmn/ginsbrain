@@ -60,6 +60,7 @@ func getMemoryHandler(w http.ResponseWriter, h *http.Request) {
 	for _, v := range brain.Memories {
 		if v.Id == id && v.Active == true {
 			returnJson(v, w, h)
+			return
 		}
 	}
 
