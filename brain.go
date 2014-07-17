@@ -1,8 +1,16 @@
 package main
 
 import (
+	"bytes"
+	"encoding/gob"
+	"launchpad.net/goamz/aws"
+	"launchpad.net/goamz/s3"
+	"log"
 	"time"
 )
+
+const filename = "ginsbrain"
+const bucketName = "david-egg-roll"
 
 type Memory struct {
 	Id      int       `json:"id"`
@@ -17,7 +25,7 @@ type Brain struct {
 }
 
 // Load a brain
-func (brain *Brain) Load() {
+func (brain *Brain) LoadTemp() {
 	var memories []Memory
 	var memory Memory
 	memory.Id = 0
@@ -35,9 +43,61 @@ func (brain *Brain) Load() {
 	brain.Memories = memories
 }
 
+func (brain *Brain) Load() {
+	// The AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY environment variables are used.
+	auth, err := aws.EnvAuth()
+	if err != nil {
+		panic(err.Error())
+	}
+
+	// Open Bucket
+	s := s3.New(auth, aws.USEast)
+
+	// Load the database from an S3 bucket
+	bucket := s.Bucket(bucketName)
+
+	// Create a bytes.Buffer
+	n, err := bucket.Get(filename)
+	if err != nil {
+		panic(err)
+	}
+
+	p := bytes.NewBuffer(n)
+	dec := gob.NewDecoder(p)
+
+	err = dec.Decode(&brain)
+
+	if err != nil {
+		log.Print("There was an error loading the brain. Using a blank one.")
+	}
+}
+
 // Persist a brain
 func (brain *Brain) Save() {
+	// Persist the database to file
+	var data bytes.Buffer
+	contents := gob.NewEncoder(&data)
+	err := contents.Encode(brain)
+	if err != nil {
+		panic(err)
+	}
 
+	// The AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY environment variables are used.
+	auth, err := aws.EnvAuth()
+	if err != nil {
+		panic(err.Error())
+	}
+
+	// Open Bucket
+	s := s3.New(auth, aws.USEast)
+
+	// Load the database from an S3 bucket
+	bucket := s.Bucket(bucketName)
+
+	err = bucket.Put(filename, data.Bytes(), "text/plain", s3.BucketOwnerFull)
+	if err != nil {
+		panic(err.Error())
+	}
 }
 
 // Add a memory
@@ -62,11 +122,6 @@ func (brain *Brain) Update(m Memory) Memory {
 		}
 	}
 	return brain.Memories[idx]
-}
-
-// Return the current brain
-func getBrain() Brain {
-	return brain
 }
 
 // Get the next Id for the brain
