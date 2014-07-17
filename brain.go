@@ -90,6 +90,8 @@ func (brain *Brain) Add(m Memory) Memory {
 
 	brain.Memories = append(brain.Memories, m)
 
+	// Save the brain
+	brain.Save()
 	// Return the memory since it's been given an Id and a AddedAt
 	return m
 }
