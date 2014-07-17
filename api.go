@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
+	"math/rand"
 	"net/http"
 	"strconv"
-	"math/rand"
 	"strings"
 )
 
@@ -36,7 +36,7 @@ func allMemoryHandler(w http.ResponseWriter, h *http.Request) {
 
 // Return a random memory
 func randomMemoryHandler(w http.ResponseWriter, h *http.Request) {
-	random_id := rand.Intn(brain.GetNextId()-1)
+	random_id := rand.Intn(brain.GetNextId() - 1)
 	m := brain.Memories[random_id]
 	returnJson(m, w, h)
 }
@@ -88,6 +88,16 @@ func changeMemoryHandler(w http.ResponseWriter, h *http.Request) {
 	var m Memory
 	b := json.NewDecoder(h.Body)
 	b.Decode(&m)
+
+	// The ID should come from the URL route, not the memory object that was posted
+	vars := mux.Vars(h)
+	mem_id_str := vars["id"]
+
+	mem_id, err := strconv.Atoi(mem_id_str)
+	if err != nil {
+		panic("ID was not valid")
+	}
+	m.Id = mem_id
 
 	memory := brain.Update(m)
 
