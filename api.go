@@ -106,5 +106,22 @@ func changeMemoryHandler(w http.ResponseWriter, h *http.Request) {
 
 // Remove a memory
 func removeMemoryHandler(w http.ResponseWriter, h *http.Request) {
-	returnJson(brain, w, h)
+	vars := mux.Vars(h)
+	id_str := vars["id"]
+	id, err := strconv.Atoi(id_str)
+
+	if err != nil {
+		panic("ID was not an integer")
+	}
+
+	// Find the item to be deleted
+	var memory Memory
+	for k, v := range brain.Memories {
+		if v.Id == id {
+			v.Active = false
+			memory = brain.Memories[k]
+		}
+	}
+
+	returnJson(memory, w, h)
 }
