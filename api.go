@@ -34,10 +34,20 @@ func allMemoryHandler(w http.ResponseWriter, h *http.Request) {
 	returnJson(brain, w, h)
 }
 
-// Return a random memory
+// Return a random memory. This should only consider active memories
 func randomMemoryHandler(w http.ResponseWriter, h *http.Request) {
-	random_id := rand.Intn(brain.GetNextId() - 1)
-	m := brain.Memories[random_id]
+	var active_memories []Memory
+	var i int
+
+	for k, v := range brain.Memories {
+		if v.Active == true {
+			active_memories = append(active_memories, brain.Memories[k])
+			i++
+		}
+	}
+
+	random_id := rand.Intn(i)
+	m := active_memories[random_id]
 	returnJson(m, w, h)
 }
 
@@ -52,10 +62,13 @@ func getMemoryHandler(w http.ResponseWriter, h *http.Request) {
 	}
 
 	for _, v := range brain.Memories {
-		if v.Id == id {
+		if v.Id == id && v.Active == true {
 			returnJson(v, w, h)
 		}
 	}
+
+	var blank Memory
+	returnJson(blank, w, h)
 }
 
 // Add a memory
@@ -64,6 +77,8 @@ func addMemoryHandler(w http.ResponseWriter, h *http.Request) {
 	b := json.NewDecoder(h.Body)
 	b.Decode(&m)
 
+	// Default a new memory to active
+	m.Active = true
 	memory := brain.Add(m)
 	returnJson(memory, w, h)
 }
