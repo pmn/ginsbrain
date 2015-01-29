@@ -92,7 +92,7 @@ func (brain *Brain) Add(m Memory) Memory {
 
 	// Save the brain
 	brain.Save()
-	// Return the memory since it's been given an Id and a AddedAt
+	// Return the memory since it's been given an Id and an AddedAt
 	return m
 }
 
